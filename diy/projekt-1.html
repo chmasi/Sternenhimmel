@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projekttitel — Martins Sternenhimmel</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav class="site-nav scrolled" id="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">M. Sickel</a>
+    <button class="nav-toggle" aria-label="Menü" id="menuToggle">&#9776;</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#galerie">Galerie</a></li>
+      <li><a href="../index.html#blog">Blog</a></li>
+      <li><a href="../index.html#diy">DIY-Projekte</a></li>
+      <li><a href="../index.html#ueber-mich">Über mich</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="subpage-hero">
+  <p class="section-label">DIY-Projekt</p>
+  <h1>Projekttitel</h1>
+  <p class="hero-sub"><span class="diy-status done">Fertig</span></p>
+</div>
+
+<article class="article">
+
+  <div class="article-hero-img">
+    <!-- <img src="../bilder/diy/dein-bild.jpg" alt="Beschreibung"> -->
+    Bild einfügen
+  </div>
+
+  <p>Hier kommt die Einleitung zum Projekt hin. Was war die Idee, warum wurde es gebaut?</p>
+
+  <h2>Material und Werkzeug</h2>
+
+  <ul>
+    <li>Material 1</li>
+    <li>Material 2</li>
+    <li>Material 3</li>
+  </ul>
+
+  <h2>Bauanleitung</h2>
+
+  <p>Beschreibe die einzelnen Schritte des Baus.</p>
+
+  <p>Weiterer Absatz mit Details.</p>
+
+  <h2>Ergebnis</h2>
+
+  <p>Wie hat es funktioniert? Was würdest du beim nächsten Mal anders machen?</p>
+
+  <a href="../index.html#diy" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Zurück zur Übersicht
+  </a>
+
+</article>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-name">Martins Sternenhimmel</p>
+    <p>&copy; 2026 Martin Sickel</p>
+  </div>
+</footer>
+
+<script>
+  var btn = document.getElementById('menuToggle');
+  var links = document.getElementById('navLinks');
+  btn.addEventListener('click', function() { links.classList.toggle('open'); });
+  links.addEventListener('click', function(e) { if (e.target.tagName === 'A') links.classList.remove('open'); });
+</script>
+
+</body>
+</html>

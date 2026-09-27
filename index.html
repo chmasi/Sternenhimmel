@@ -2,424 +2,18 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Martins Sternenhimmel</title>
   <meta name="description" content="Astrofotografie — Nebel, Galaxien und Planeten durch mein Teleskop">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap">
-  <style>
-    :root {
-      --bg: #060810;
-      --bg-elevated: #0d1018;
-      --surface: #141824;
-      --surface-hover: #1a2030;
-      --border: #1e2640;
-      --accent: #7b93db;
-      --accent-warm: #d4a574;
-      --text: #dce0ea;
-      --text-secondary: #8892b0;
-      --text-muted: #4a5270;
-      --radius: 6px;
-      color-scheme: dark;
-    }
-    * { margin: 0; padding: 0; }
-    *, *::before, *::after { box-sizing: border-box; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Outfit', system-ui, sans-serif;
-      font-weight: 300;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-    img { max-width: 100%; display: block; }
-
-    /* — Nav — */
-    .site-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: transparent;
-      transition: background 0.4s, backdrop-filter 0.4s;
-    }
-    .site-nav.scrolled {
-      background: rgba(6,8,16,0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-    .nav-inner {
-      max-width: 1100px; margin: 0 auto; padding: 16px 24px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-logo {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.25rem; font-weight: 600;
-      color: var(--text); text-decoration: none; letter-spacing: 0.02em;
-    }
-    .nav-links {
-      display: flex; gap: 28px; list-style: none;
-    }
-    .nav-links a {
-      color: var(--text-secondary); text-decoration: none;
-      font-size: 0.85rem; font-weight: 400;
-      letter-spacing: 0.04em; text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover, .nav-links a:focus-visible { color: var(--accent); }
-    .nav-toggle {
-      display: none; background: none; border: none;
-      color: var(--text); font-size: 1.5rem; cursor: pointer; padding: 4px;
-    }
-    @media (max-width: 640px) {
-      .nav-toggle { display: block; }
-      .nav-links {
-        display: none; position: absolute; top: 100%; left: 0; right: 0;
-        flex-direction: column; gap: 0;
-        background: rgba(6,8,16,0.96); backdrop-filter: blur(12px);
-        padding: 8px 24px 16px;
-      }
-      .nav-links.open { display: flex; }
-      .nav-links a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); }
-      .nav-links li:last-child a { border-bottom: none; }
-    }
-
-    /* — Hero — */
-    .hero {
-      position: relative; min-height: 85vh;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center; overflow: hidden;
-    }
-    .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .hero-content { position: relative; z-index: 1; padding: 120px 24px 80px; }
-    .hero h1 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-weight: 400; font-size: clamp(2.5rem, 7vw, 5rem);
-      line-height: 1.1; margin: 0 0 16px; color: var(--text);
-    }
-    .hero h1 em { font-style: italic; color: var(--accent); }
-    .hero-sub {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--text-secondary); margin: 0 0 40px; font-weight: 300;
-    }
-    .hero-scroll {
-      display: inline-flex; align-items: center; gap: 8px;
-      color: var(--text-muted); font-size: 0.8rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      text-decoration: none; transition: color 0.2s;
-    }
-    .hero-scroll:hover { color: var(--accent); }
-    .hero-scroll svg { animation: bobDown 2s ease-in-out infinite; }
-    @keyframes bobDown { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
-
-    /* — Sections — */
-    .section { max-width: 1100px; margin: 0 auto; padding: 80px 24px; }
-    .section-header { margin-bottom: 48px; }
-    .section-label {
-      font-size: 0.75rem; font-weight: 500;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--accent); margin: 0 0 12px;
-    }
-    .section-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 400; margin: 0; line-height: 1.2;
-    }
-    .section-divider { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-    .section-divider hr { border: none; border-top: 1px solid var(--border); margin: 0; }
-
-    /* — Gallery — */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 16px;
-    }
-    .gallery-item {
-      position: relative; border-radius: var(--radius);
-      overflow: hidden; cursor: pointer; aspect-ratio: 4/3;
-    }
-    .gallery-item.wide { grid-column: span 2; aspect-ratio: 16/9; }
-    @media (max-width: 700px) {
-      .gallery-grid { grid-template-columns: 1fr; }
-      .gallery-item.wide { grid-column: span 1; aspect-ratio: 4/3; }
-    }
-    .gallery-visual {
-      width: 100%; height: 100%;
-      transition: transform 0.6s ease;
-      background-size: cover; background-position: center;
-    }
-    .gallery-item:hover .gallery-visual { transform: scale(1.05); }
-    .gallery-caption {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 40px 20px 16px;
-      background: linear-gradient(transparent, rgba(6,8,16,0.85));
-      opacity: 0; transition: opacity 0.3s;
-    }
-    .gallery-item:hover .gallery-caption,
-    .gallery-item:focus-within .gallery-caption { opacity: 1; }
-    .gallery-caption h3 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.2rem; font-weight: 400; margin: 0 0 4px;
-    }
-    .gallery-caption p { font-size: 0.8rem; color: var(--text-secondary); margin: 0; }
-
-    /* placeholder for images not yet added */
-    .gallery-placeholder {
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      background: var(--surface); gap: 8px;
-    }
-    .gallery-placeholder svg { opacity: 0.25; }
-    .gallery-placeholder span {
-      font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.05em;
-    }
-
-    /* CSS celestial visuals (placeholders until real images) */
-    .vis-orion {
-      background:
-        radial-gradient(ellipse 60% 50% at 45% 50%, rgba(180,60,100,0.6), transparent),
-        radial-gradient(ellipse 40% 35% at 48% 48%, rgba(220,120,160,0.4), transparent),
-        radial-gradient(ellipse 80% 70% at 50% 50%, rgba(80,40,120,0.5), transparent),
-        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.8) 0px, transparent 2px),
-        radial-gradient(circle at 70% 35%, rgba(200,220,255,0.7) 0px, transparent 2px),
-        radial-gradient(circle at 55% 70%, rgba(255,240,200,0.6) 0px, transparent 1.5px),
-        var(--bg);
-    }
-    .vis-andromeda {
-      background:
-        radial-gradient(ellipse 70% 30% at 50% 50%, rgba(160,180,220,0.5), transparent),
-        radial-gradient(ellipse 50% 20% at 50% 50%, rgba(200,210,240,0.4), transparent),
-        radial-gradient(ellipse 30% 12% at 50% 50%, rgba(240,240,255,0.3), transparent),
-        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.5) 0px, transparent 1px),
-        var(--bg);
-    }
-    .vis-milkyway {
-      background:
-        radial-gradient(ellipse 100% 40% at 50% 55%, rgba(180,150,100,0.4), transparent),
-        radial-gradient(ellipse 60% 25% at 45% 52%, rgba(200,170,120,0.3), transparent),
-        radial-gradient(circle at 25% 30%, rgba(255,255,255,0.6) 0px, transparent 1.5px),
-        radial-gradient(circle at 60% 25%, rgba(255,240,200,0.5) 0px, transparent 1px),
-        var(--bg);
-    }
-    .vis-moon {
-      background:
-        radial-gradient(circle at 45% 45%, #a0a0a0, #707070 40%, #404050 65%, var(--bg) 80%),
-        radial-gradient(circle at 38% 35%, rgba(180,180,180,0.3) 0px, transparent 15%),
-        var(--bg);
-    }
-    .vis-saturn {
-      background:
-        conic-gradient(from 170deg at 50% 48%, transparent 0deg, rgba(180,160,130,0.15) 5deg, transparent 10deg, rgba(180,160,130,0.1) 170deg, transparent 180deg, rgba(180,160,130,0.15) 355deg, transparent 360deg),
-        radial-gradient(ellipse 25% 28% at 50% 50%, #c8a870, #a08050 60%, transparent 70%),
-        var(--bg);
-    }
-    .vis-pleiades {
-      background:
-        radial-gradient(circle at 40% 35%, rgba(140,180,255,0.6) 0px, rgba(100,150,255,0.15) 8%, transparent 20%),
-        radial-gradient(circle at 55% 45%, rgba(160,190,255,0.5) 0px, rgba(120,160,255,0.1) 6%, transparent 18%),
-        radial-gradient(circle at 48% 55%, rgba(130,170,255,0.4) 0px, transparent 12%),
-        radial-gradient(circle at 60% 30%, rgba(170,200,255,0.4) 0px, transparent 10%),
-        radial-gradient(circle at 35% 50%, rgba(150,180,255,0.35) 0px, transparent 8%),
-        var(--bg);
-    }
-    .vis-horsehead {
-      background:
-        radial-gradient(ellipse 50% 60% at 55% 40%, rgba(160,40,50,0.5), transparent),
-        radial-gradient(ellipse 35% 45% at 50% 50%, rgba(30,15,20,0.8), transparent 80%),
-        radial-gradient(circle at 65% 25%, rgba(255,220,180,0.7) 0px, transparent 2px),
-        radial-gradient(circle at 40% 20%, rgba(200,210,255,0.5) 0px, transparent 1.5px),
-        var(--bg);
-    }
-    .vis-ring {
-      background:
-        radial-gradient(circle at 50% 50%, rgba(60,200,160,0.15) 20%, rgba(40,120,180,0.2) 35%, transparent 50%),
-        radial-gradient(circle at 50% 50%, transparent 15%, rgba(80,220,200,0.12) 18%, rgba(80,220,200,0.12) 22%, transparent 25%),
-        radial-gradient(circle at 48% 42%, rgba(255,255,255,0.7) 0px, transparent 2px),
-        radial-gradient(circle at 35% 60%, rgba(200,220,255,0.4) 0px, transparent 1px),
-        var(--bg);
-    }
-    .vis-lagoon {
-      background:
-        radial-gradient(ellipse 55% 45% at 48% 52%, rgba(180,50,80,0.45), transparent),
-        radial-gradient(ellipse 40% 30% at 52% 48%, rgba(220,100,120,0.3), transparent),
-        radial-gradient(circle at 45% 40%, rgba(255,200,180,0.4) 0px, transparent 8%),
-        radial-gradient(circle at 60% 30%, rgba(255,255,255,0.6) 0px, transparent 2px),
-        radial-gradient(circle at 30% 55%, rgba(200,210,255,0.4) 0px, transparent 1.5px),
-        var(--bg);
-    }
-    .vis-jupiter {
-      background:
-        linear-gradient(180deg,
-          rgba(180,150,120,0.3) 15%, rgba(200,160,100,0.4) 25%,
-          rgba(160,120,80,0.3) 35%, rgba(200,170,130,0.4) 45%,
-          rgba(180,80,60,0.35) 52%, rgba(180,80,60,0.35) 56%,
-          rgba(200,170,130,0.4) 63%, rgba(160,130,90,0.3) 75%,
-          rgba(180,150,110,0.3) 85%),
-        radial-gradient(ellipse 45% 48% at 50% 50%, rgba(200,170,130,0.5), transparent 70%),
-        var(--bg);
-    }
-
-    /* — Lightbox — */
-    .lightbox {
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(6,8,16,0.92);
-      backdrop-filter: blur(20px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 40px 24px;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s;
-    }
-    .lightbox.hidden { display: none; }
-    .lightbox.active { opacity: 1; pointer-events: auto; }
-    .lightbox-inner { max-width: 900px; width: 100%; text-align: center; }
-    .lightbox-visual {
-      width: 100%; aspect-ratio: 16/9; border-radius: var(--radius); margin-bottom: 20px;
-    }
-    .lightbox-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.5rem; font-weight: 400; margin: 0 0 8px;
-    }
-    .lightbox-desc { color: var(--text-secondary); font-size: 0.9rem; margin: 0 0 8px; }
-    .lightbox-meta { font-size: 0.75rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-    .lightbox-close {
-      position: absolute; top: 20px; right: 24px;
-      background: none; border: none; color: var(--text-secondary);
-      font-size: 1.5rem; cursor: pointer; padding: 8px; line-height: 1;
-      transition: color 0.2s;
-    }
-    .lightbox-close:hover { color: var(--text); }
-
-    /* — Blog — */
-    .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 24px;
-    }
-    @media (max-width: 700px) { .blog-grid { grid-template-columns: 1fr; } }
-    .blog-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 28px 24px;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .blog-date {
-      font-size: 0.75rem; color: var(--text-muted);
-      letter-spacing: 0.05em; text-transform: uppercase;
-      font-variant-numeric: tabular-nums;
-    }
-    .blog-card h3 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.3rem; font-weight: 600; margin: 10px 0 12px; line-height: 1.3;
-    }
-    .blog-card p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.6; }
-    .blog-tag {
-      display: inline-block; margin-top: 16px;
-      font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--accent); background: rgba(123,147,219,0.1);
-      padding: 3px 10px; border-radius: 20px;
-    }
-
-    /* — DIY Projects — */
-    .diy-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 24px;
-    }
-    @media (max-width: 700px) { .diy-grid { grid-template-columns: 1fr; } }
-    .diy-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .diy-card:hover { border-color: var(--accent-warm); transform: translateY(-2px); }
-    .diy-thumb {
-      aspect-ratio: 16/9; background: var(--bg-elevated);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 6px;
-    }
-    .diy-thumb img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-    .diy-thumb svg { opacity: 0.2; }
-    .diy-thumb span { font-size: 0.7rem; color: var(--text-muted); }
-    .diy-body { padding: 20px 24px; }
-    .diy-status {
-      display: inline-block; font-size: 0.65rem; font-weight: 500;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 2px 8px; border-radius: 20px; margin-bottom: 10px;
-    }
-    .diy-status.done { color: #6bcf8e; background: rgba(107,207,142,0.1); }
-    .diy-status.wip { color: var(--accent-warm); background: rgba(212,165,116,0.1); }
-    .diy-status.planned { color: var(--text-muted); background: rgba(74,82,112,0.15); }
-    .diy-card h3 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.2rem; font-weight: 600; margin: 0 0 8px; line-height: 1.3;
-    }
-    .diy-card p { color: var(--text-secondary); font-size: 0.85rem; margin: 0; line-height: 1.6; }
-
-    /* — About — */
-    .about-layout {
-      display: grid; grid-template-columns: 260px 1fr;
-      gap: 48px; align-items: start;
-    }
-    @media (max-width: 700px) { .about-layout { grid-template-columns: 1fr; gap: 32px; } }
-    .about-portrait {
-      aspect-ratio: 3/4; border-radius: var(--radius);
-      overflow: hidden;
-      background: linear-gradient(135deg, var(--surface) 0%, rgba(123,147,219,0.15) 100%);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-muted); font-size: 0.8rem;
-    }
-    .about-portrait img { width: 100%; height: 100%; object-fit: cover; }
-    .about-text h3 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.5rem; font-weight: 400; margin: 0 0 16px;
-    }
-    .about-text p { color: var(--text-secondary); margin: 0 0 16px; max-width: 60ch; }
-    .about-text p:last-child { margin-bottom: 0; }
-    .equipment-list {
-      margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);
-    }
-    .equipment-list + .equipment-list {
-      border-top: none; margin-top: 16px; padding-top: 0;
-    }
-    .equipment-list h4 {
-      font-size: 0.75rem; font-weight: 500;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--accent-warm); margin: 0 0 16px;
-    }
-    .equipment-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
-    }
-    .equip-item {
-      font-size: 0.85rem; color: var(--text-secondary);
-      padding-left: 16px; position: relative;
-    }
-    .equip-item::before {
-      content: ''; position: absolute; left: 0; top: 8px;
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent); opacity: 0.5;
-    }
-
-    /* — Footer — */
-    .site-footer {
-      border-top: 1px solid var(--border); padding: 40px 24px; text-align: center;
-    }
-    .footer-inner { max-width: 1100px; margin: 0 auto; }
-    .footer-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.1rem; margin: 0 0 8px;
-    }
-    .site-footer p { color: var(--text-muted); font-size: 0.8rem; margin: 0; }
-
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    @media (prefers-reduced-motion: reduce) {
-      *,*::before,*::after { animation-duration: 0.01ms!important; transition-duration: 0.01ms!important; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- Navigation -->
 <nav class="site-nav" id="nav">
   <div class="nav-inner">
-    <a href="#" class="nav-logo">M. Sickel</a>
+    <a href="index.html" class="nav-logo">M. Sickel</a>
     <button class="nav-toggle" aria-label="Menü" id="menuToggle">&#9776;</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#galerie">Galerie</a></li>
@@ -452,61 +46,91 @@
   <div class="gallery-grid">
 
     <!--
-      BILDER EINBAUEN:
-      1. Bild in den Ordner "bilder/galerie/" legen (z.B. orion.jpg)
-      2. Im gallery-visual div die CSS-Klasse (vis-orion etc.) durch ein style ersetzen:
-         <div class="gallery-visual" style="background-image: url('bilder/galerie/orion.jpg')"></div>
-      3. Titel, Beschreibung und Aufnahmedaten in data-title, data-desc, data-meta anpassen
+      BILD EINBAUEN:
+      1. Bild in "bilder/galerie/" legen
+      2. Die Platzhalter-Klasse durch ein style ersetzen:
+         <div class="gallery-visual" style="background-image: url('bilder/galerie/dein-bild.jpg')"></div>
+      3. Titel, Beschreibung und Aufnahmedaten anpassen
     -->
 
-    <div class="gallery-item wide" tabindex="0" data-title="Orionnebel (M42)" data-desc="Der große Orionnebel in voller Pracht — ein Sternentstehungsgebiet in rund 1.344 Lichtjahren Entfernung." data-meta="120×60s · ISO 1600 · 800mm f/4" data-vis="vis-orion">
-      <div class="gallery-visual vis-orion"></div>
-      <div class="gallery-caption"><h3>Orionnebel (M42)</h3><p>120 min Belichtung</p></div>
+    <div class="gallery-item wide" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 1</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 1</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Andromedagalaxie (M31)" data-desc="Unsere große Nachbargalaxie, 2,5 Millionen Lichtjahre entfernt." data-meta="180×90s · ISO 800 · 600mm f/5" data-vis="vis-andromeda">
-      <div class="gallery-visual vis-andromeda"></div>
-      <div class="gallery-caption"><h3>Andromedagalaxie</h3><p>Mosaik aus 3 Nächten</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 2</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 2</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Milchstraßenzentrum" data-desc="Das Band der Milchstraße über dem Horizont — Panorama aus 12 Einzelaufnahmen." data-meta="12×30s · ISO 3200 · 14mm f/2.8" data-vis="vis-milkyway">
-      <div class="gallery-visual vis-milkyway"></div>
-      <div class="gallery-caption"><h3>Milchstraße</h3><p>12er Panorama</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 3</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 3</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Pferdekopfnebel (B33)" data-desc="Die berühmte Dunkelwolke vor dem leuchtenden IC 434 im Sternbild Orion." data-meta="90×120s · ISO 1600 · 1000mm f/5" data-vis="vis-horsehead">
-      <div class="gallery-visual vis-horsehead"></div>
-      <div class="gallery-caption"><h3>Pferdekopfnebel</h3><p>Schmalband Ha/OIII</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 4</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 4</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Mond — Krater Copernicus" data-desc="Nahaufnahme des Mondkraters Copernicus. Lucky-Imaging aus 2000 Frames." data-meta="2000 Frames · Gain 120 · 2000mm f/10" data-vis="vis-moon">
-      <div class="gallery-visual vis-moon"></div>
-      <div class="gallery-caption"><h3>Mondkrater</h3><p>Lucky Imaging</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 5</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 5</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Saturn" data-desc="Saturn mit deutlich sichtbarem Ringsystem und Cassini-Teilung." data-meta="4000 Frames · Gain 200 · 3000mm f/15" data-vis="vis-saturn">
-      <div class="gallery-visual vis-saturn"></div>
-      <div class="gallery-caption"><h3>Saturn</h3><p>Planeten-Imaging</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 6</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 6</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item wide" tabindex="0" data-title="Plejaden (M45)" data-desc="Der offene Sternhaufen der Plejaden, umgeben von blauem Reflexionsnebel." data-meta="90×120s · ISO 1600 · 500mm f/4" data-vis="vis-pleiades">
-      <div class="gallery-visual vis-pleiades"></div>
-      <div class="gallery-caption"><h3>Plejaden (M45)</h3><p>3 Stunden Belichtung</p></div>
+    <div class="gallery-item wide" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 7</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 7</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Ringnebel (M57)" data-desc="Der planetarische Nebel M57 in der Leier — eine abgestoßene Gashülle eines sterbenden Sterns." data-meta="60×180s · ISO 800 · 1200mm f/6" data-vis="vis-ring">
-      <div class="gallery-visual vis-ring"></div>
-      <div class="gallery-caption"><h3>Ringnebel (M57)</h3><p>Planetarischer Nebel</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 8</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 8</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Lagunennebel (M8)" data-desc="Der Lagunennebel — eine der hellsten Sternentstehungsregionen am Sommerhimmel." data-meta="80×90s · ISO 1600 · 800mm f/4" data-vis="vis-lagoon">
-      <div class="gallery-visual vis-lagoon"></div>
-      <div class="gallery-caption"><h3>Lagunennebel (M8)</h3><p>Emissionsnebel</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 9</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 9</h3><p>Aufnahmedaten</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Jupiter" data-desc="Jupiter mit Großem Roten Fleck und Wolkenbändern. Aufnahme bei exzellentem Seeing." data-meta="6000 Frames · Gain 180 · 3000mm f/15" data-vis="vis-jupiter">
-      <div class="gallery-visual vis-jupiter"></div>
-      <div class="gallery-caption"><h3>Jupiter</h3><p>Planeten-Imaging</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
+      <div class="gallery-visual gallery-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Bild 10</span>
+      </div>
+      <div class="gallery-caption"><h3>Aufnahme 10</h3><p>Aufnahmedaten</p></div>
     </div>
 
   </div>
@@ -532,24 +156,24 @@
     <h2 class="section-title">Aus dem Beobachtungstagebuch</h2>
   </div>
   <div class="blog-grid">
-    <article class="blog-card">
-      <span class="blog-date">15. September 2026</span>
-      <h3>Platzhalter</h3>
-      <p>In Arbeit&hellip;</p>
-      <span class="blog-tag">Equipment</span>
-    </article>
-    <article class="blog-card">
-      <span class="blog-date">28. August 2026</span>
-      <h3>Platzhalter</h3>
-      <p>In Arbeit</p>
-      <span class="blog-tag">Tutorial</span>
-    </article>
-    <article class="blog-card">
-      <span class="blog-date">10. Juli 2026</span>
-      <h3>Platzhalter</h3>
-      <p>In Arbeit</p>
-      <span class="blog-tag">Beobachtung</span>
-    </article>
+    <a class="blog-card" href="blog/beitrag-1.html">
+      <span class="blog-date">Datum</span>
+      <h3>Titel des Beitrags</h3>
+      <p>Kurze Vorschau des Beitrags&hellip;</p>
+      <span class="blog-tag">Kategorie</span>
+    </a>
+    <a class="blog-card" href="blog/beitrag-2.html">
+      <span class="blog-date">Datum</span>
+      <h3>Titel des Beitrags</h3>
+      <p>Kurze Vorschau des Beitrags&hellip;</p>
+      <span class="blog-tag">Kategorie</span>
+    </a>
+    <a class="blog-card" href="blog/beitrag-3.html">
+      <span class="blog-date">Datum</span>
+      <h3>Titel des Beitrags</h3>
+      <p>Kurze Vorschau des Beitrags&hellip;</p>
+      <span class="blog-tag">Kategorie</span>
+    </a>
   </div>
 </section>
 
@@ -562,51 +186,50 @@
     <h2 class="section-title">Selbstbau rund ums Teleskop</h2>
   </div>
   <div class="diy-grid">
-    <div class="diy-card">
-      <!-- Bild: <img src="bilder/diy/taukappe.jpg" alt="Taukappe aus 3D-Druck"> -->
+    <a class="diy-card" href="diy/projekt-1.html">
       <div class="diy-thumb">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
         <span>Foto einfügen</span>
       </div>
       <div class="diy-body">
         <span class="diy-status done">Fertig</span>
-        <h3>Taukappe aus 3D-Druck</h3>
-        <p>In Arbeit</p>
+        <h3>Projekttitel</h3>
+        <p>Kurze Beschreibung des Projekts.</p>
       </div>
-    </div>
-    <div class="diy-card">
+    </a>
+    <a class="diy-card" href="diy/projekt-2.html">
       <div class="diy-thumb">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
         <span>Foto einfügen</span>
       </div>
       <div class="diy-body">
         <span class="diy-status done">Fertig</span>
-        <h3>Platzhalter</h3>
-        <p>In Arbeit</p>
+        <h3>Projekttitel</h3>
+        <p>Kurze Beschreibung des Projekts.</p>
       </div>
-    </div>
-    <div class="diy-card">
+    </a>
+    <a class="diy-card" href="diy/projekt-3.html">
       <div class="diy-thumb">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
         <span>Foto einfügen</span>
       </div>
       <div class="diy-body">
         <span class="diy-status wip">In Arbeit</span>
-        <h3>Platzhalter</h3>
-        <p>In Arbeit</p>
+        <h3>Projekttitel</h3>
+        <p>Kurze Beschreibung des Projekts.</p>
       </div>
-    </div>
-    <div class="diy-card">
+    </a>
+    <a class="diy-card" href="diy/projekt-4.html">
       <div class="diy-thumb">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
         <span>Foto einfügen</span>
       </div>
       <div class="diy-body">
         <span class="diy-status planned">Geplant</span>
-        <h3>Platzhalter</h3>
-        <p>In Arbeit.</p>
+        <h3>Projekttitel</h3>
+        <p>Kurze Beschreibung des Projekts.</p>
       </div>
-    </div>
+    </a>
   </div>
 </section>
 
@@ -620,14 +243,13 @@
   </div>
   <div class="about-layout">
     <div class="about-portrait">
-      <!-- Dein Foto: <img src="bilder/portrait.jpg" alt="Martin Sickel"> -->
-      Dein Foto hier
+      <!-- <img src="bilder/portrait.jpg" alt="Martin Sickel"> -->
+      Foto einfügen
     </div>
     <div class="about-text">
       <h3>Martin Sickel</h3>
-      <p>Platzhalter</p>
-      <p>Platzhalter</p>
-      <p>Platzhalter</p>
+      <p>Hier kommt dein persönlicher Text hin. Erzähle etwas über dich, wie du zur Astrofotografie gekommen bist und was dich daran fasziniert.</p>
+      <p>Beschreibe deinen Beobachtungsstandort, deine Schwerpunkte und was du auf dieser Seite teilen möchtest.</p>
       <div class="equipment-list">
         <h4>Montierung</h4>
         <div class="equipment-grid">
@@ -664,23 +286,23 @@
 <footer class="site-footer">
   <div class="footer-inner">
     <p class="footer-name">Martins Sternenhimmel</p>
-    <p>&copy; 2026 Martin Sickel &middot; Alle Rechte vorbehalten</p>
+    <p>&copy; 2026 Martin Sickel</p>
   </div>
 </footer>
 
 <script>
-  // Starfield canvas
+  // Starfield
   (function() {
-    const canvas = document.getElementById('starfield');
+    var canvas = document.getElementById('starfield');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let w, h, stars = [];
-    const noMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ctx = canvas.getContext('2d');
+    var w, h, stars = [];
+    var noMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     function resize() { w = canvas.width = canvas.offsetWidth; h = canvas.height = canvas.offsetHeight; }
     function init() {
       resize(); stars = [];
-      const n = Math.floor((w * h) / 2200);
-      for (let i = 0; i < n; i++) {
+      var n = Math.floor((w * h) / 2200);
+      for (var i = 0; i < n; i++) {
         stars.push({
           x: Math.random()*w, y: Math.random()*h,
           r: Math.random()*1.4+0.3, base: Math.random()*0.6+0.35,
@@ -691,8 +313,9 @@
     }
     function draw(t) {
       ctx.clearRect(0,0,w,h);
-      for (const s of stars) {
-        const a = noMotion ? s.base : s.base + Math.sin(t*s.speed+s.phase)*0.3;
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        var a = noMotion ? s.base : s.base + Math.sin(t*s.speed+s.phase)*0.3;
         ctx.fillStyle = s.hue
           ? 'hsla('+s.hue+',60%,80%,'+Math.max(0,a)+')'
           : 'rgba(220,224,234,'+Math.max(0,a)+')';
@@ -723,18 +346,18 @@
     var lb = document.getElementById('lightbox');
     var items = document.querySelectorAll('.gallery-item');
     function openLB(item) {
-      var vis = item.dataset.vis || '';
       var lbVis = document.getElementById('lbVisual');
-      lbVis.className = 'lightbox-visual ' + vis;
-      // If the gallery item has a background-image, show it in lightbox too
+      lbVis.className = 'lightbox-visual';
+      lbVis.style.backgroundImage = '';
       var galleryVis = item.querySelector('.gallery-visual');
       if (galleryVis && galleryVis.style.backgroundImage) {
         lbVis.style.backgroundImage = galleryVis.style.backgroundImage;
         lbVis.style.backgroundSize = 'contain';
         lbVis.style.backgroundPosition = 'center';
         lbVis.style.backgroundRepeat = 'no-repeat';
+        lbVis.style.backgroundColor = 'var(--bg)';
       } else {
-        lbVis.style.backgroundImage = '';
+        lbVis.style.backgroundColor = 'var(--surface)';
       }
       document.getElementById('lbTitle').textContent = item.dataset.title || '';
       document.getElementById('lbDesc').textContent = item.dataset.desc || '';
