@@ -83,12 +83,9 @@
       <div class="gallery-caption"><h3>Nordamerikanebel (NGC 7000)</h3><p>Emissionsnebel im Schwan</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
-      <div class="gallery-visual gallery-placeholder">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span>Bild 6</span>
-      </div>
-      <div class="gallery-caption"><h3>Aufnahme 6</h3><p>Aufnahmedaten</p></div>
+    <div class="gallery-item" tabindex="0" data-title="Adlernebel (M16)" data-desc="Der Adlernebel im Sternbild Schlange beherbergt die berühmten &bdquo;Säulen der Schöpfung&ldquo; — gewaltige Gassäulen, in denen neue Sterne entstehen. Der offene Sternhaufen IC 4703 beleuchtet den umgebenden Emissionsnebel Sh2-49." data-meta="Seestar S30 Pro · Sternbild Schlange · ca. 7.000 Lichtjahre" data-img="bilder/galerie/m16-adlernebel.jpg" data-overlay="bilder/galerie/m16-overlay.png">
+      <div class="gallery-visual" style="background-image: url('bilder/galerie/m16-adlernebel.jpg')"></div>
+      <div class="gallery-caption"><h3>Adlernebel (M16)</h3><p>Emissionsnebel in der Schlange</p></div>
     </div>
 
     <div class="gallery-item wide" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
@@ -355,7 +352,7 @@
     var zoomOutBtn = document.getElementById('lbZoomOut');
     var items = document.querySelectorAll('.gallery-item');
 
-    var lbImg = null, annoLayer = null, annotationsOn = false;
+    var lbImg = null, annoLayer = null, overlayLayer = null, annotationsOn = false;
     var zoom = 1, panX = 0, panY = 0;
     var isDragging = false, dragStartX, dragStartY, panStartX, panStartY;
     var lastPinchDist = 0;
@@ -395,20 +392,40 @@
         lbImg.alt = item.dataset.title || '';
         wrap.appendChild(lbImg);
       }
-      annoLayer = document.createElement('div');
-      annoLayer.className = 'lb-annotations' + (annotationsOn ? ' visible' : '');
+      var overlaySrc = item.dataset.overlay;
       var annos = [];
       try { annos = JSON.parse(item.dataset.annotations || '[]'); } catch (e) {}
-      for (var i = 0; i < annos.length; i++) {
-        var a = annos[i], m = document.createElement('div');
-        m.className = 'annotation';
-        m.style.left = a.x + '%'; m.style.top = a.y + '%';
-        m.innerHTML = '<span class="anno-dot"></span><span class="anno-label">' + esc(a.label) + '</span>';
-        annoLayer.appendChild(m);
+      var hasOverlay = !!overlaySrc;
+      var hasAnnos = annos.length > 0;
+
+      overlayLayer = null;
+      annoLayer = null;
+
+      if (hasOverlay) {
+        overlayLayer = document.createElement('div');
+        overlayLayer.className = 'lb-overlay' + (annotationsOn ? ' visible' : '');
+        var oImg = document.createElement('img');
+        oImg.src = overlaySrc;
+        oImg.alt = 'Beschriftungen';
+        overlayLayer.appendChild(oImg);
+        wrap.appendChild(overlayLayer);
       }
-      wrap.appendChild(annoLayer);
+
+      if (hasAnnos) {
+        annoLayer = document.createElement('div');
+        annoLayer.className = 'lb-annotations' + (annotationsOn ? ' visible' : '');
+        for (var i = 0; i < annos.length; i++) {
+          var a = annos[i], m = document.createElement('div');
+          m.className = 'annotation';
+          m.style.left = a.x + '%'; m.style.top = a.y + '%';
+          m.innerHTML = '<span class="anno-dot"></span><span class="anno-label">' + esc(a.label) + '</span>';
+          annoLayer.appendChild(m);
+        }
+        wrap.appendChild(annoLayer);
+      }
+
       annoBtn.classList.toggle('active', annotationsOn);
-      annoBtn.style.display = annos.length ? '' : 'none';
+      annoBtn.style.display = (hasOverlay || hasAnnos) ? '' : 'none';
       document.getElementById('lbTitle').textContent = item.dataset.title || '';
       document.getElementById('lbDesc').textContent = item.dataset.desc || '';
       document.getElementById('lbMeta').textContent = item.dataset.meta || '';
@@ -436,6 +453,7 @@
       e.stopPropagation(); annotationsOn = !annotationsOn;
       annoBtn.classList.toggle('active', annotationsOn);
       if (annoLayer) annoLayer.classList.toggle('visible', annotationsOn);
+      if (overlayLayer) overlayLayer.classList.toggle('visible', annotationsOn);
     });
     zoomInBtn.addEventListener('click', function(e) {
       e.stopPropagation();
