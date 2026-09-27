@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StarSense DIY — Martins Sternenhimmel</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav class="site-nav scrolled" id="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">M. Sickel</a>
+    <button class="nav-toggle" aria-label="Menü" id="menuToggle">&#9776;</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#galerie">Galerie</a></li>
+      <li><a href="../index.html#blog">Blog</a></li>
+      <li><a href="../index.html#diy">DIY-Projekte</a></li>
+      <li><a href="../index.html#ueber-mich">Über mich</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="subpage-hero">
+  <p class="section-label">DIY-Projekt</p>
+  <h1>StarSense DIY</h1>
+  <p class="hero-sub"><span class="diy-status wip">In Arbeit</span></p>
+</div>
+
+<article class="article">
+
+  <p>Als mein Celestron StarSense AutoAlign nach knapp drei Jahren den Geist aufgab, war die Enttäuschung groß — aber der Kundenservice noch größer: Celestron Deutschland verwies auf den US-Hauptsitz, Celestron USA verwies zurück auf den deutschen Händler. Am Ende stand ich ohne Ersatzteile, ohne Support und ohne funktionierendes Alignment-System da.</p>
+
+  <p>Also habe ich selbst eins gebaut. Nicht nur einen Ersatz — sondern ein System, das deutlich mehr kann als das Original.</p>
+
+  <h2>Was ist StarSense DIY?</h2>
+
+  <p>StarSense DIY ist eine selbstgebaute Steuerungssoftware für meine Celestron CGX Montierung, die auf einem Raspberry Pi läuft. Die Montierung wird direkt über das interne AUX-Protokoll angesprochen — ganz ohne Celestron-Firmware oder Handcontroller. Die Bedienung erfolgt komplett über den Webbrowser, vom Laptop, Tablet oder Handy.</p>
+
+  <p>Die Kernfunktionen:</p>
+  <ul>
+    <li><strong>Automatisches Plate-Solving</strong> — Die Kamera fotografiert den Himmel, ASTAP identifiziert die Sterne und berechnet die exakte Himmelsposition. Kein manuelles Sternhopping nötig.</li>
+    <li><strong>Goto mit Katalog</strong> — Über 25.000 Himmelsobjekte (Messier, NGC, Caldwell, Sharpless, Doppelsterne, Planeten) direkt anfahrbar.</li>
+    <li><strong>Autoguiding</strong> — Eigenes Autoguiding-System mit Multi-Stern-Tracking, Dark-Frame-Bibliothek und Live-Graphen — PHD2-ähnlich, aber direkt integriert.</li>
+    <li><strong>NINA-Anbindung</strong> — ASCOM-Alpaca-kompatibel, funktioniert direkt mit N.I.N.A. für die Aufnahmeplanung.</li>
+    <li><strong>Himmelskarte</strong> — Interaktive Sky-Map mit Echtzeitposition, Objektsuche und Sync-Markierungen.</li>
+    <li><strong>Park &amp; Resume</strong> — Sessions über Nächte hinweg fortsetzen, ohne neu zu alignen.</li>
+    <li><strong>Feldbetrieb</strong> — WLAN-Hotspot-Modus für den Einsatz ohne Heimnetzwerk.</li>
+  </ul>
+
+  <h2>Hardware</h2>
+
+  <ul>
+    <li><strong>Rechner:</strong> Raspberry Pi 3B+ mit Raspberry Pi OS Bookworm</li>
+    <li><strong>Kamera:</strong> SVBony SV305PRO (1920×1080, 2,9 µm Pixelgröße)</li>
+    <li><strong>Montierung:</strong> Celestron CGX (über USB/AUX-Protokoll)</li>
+    <li><strong>Plate-Solver:</strong> ASTAP (lokale Installation mit Sternkatalog)</li>
+  </ul>
+
+  <h2>Software-Architektur</h2>
+
+  <p>Das System besteht aus mehreren Python-Modulen, die über eine Flask-Webanwendung zusammenarbeiten:</p>
+
+  <ul>
+    <li><code>app.py</code> — Flask-Weboberfläche mit allen Routen und der kompletten UI</li>
+    <li><code>autoguide.py</code> — Autoguiding-Engine mit Multi-Stern-Tracking</li>
+    <li><code>mount_safety.py</code> — SafeMount-Wrapper mit Positions-Limits und Sicherheits-Locks</li>
+    <li><code>aux_mount.py</code> — Low-Level Celestron AUX-Protokoll</li>
+    <li><code>astap_solver.py</code> — Plate-Solving via ASTAP</li>
+    <li><code>astro_catalog.py</code> — Objektkatalog (Messier, NGC, Caldwell, Sharpless, Sterne)</li>
+    <li><code>alpaca_telescope.py</code> — ASCOM-Alpaca-Treiber für NINA</li>
+    <li><code>ephemeris.py</code> — Planetenberechnung über PyMeeus</li>
+  </ul>
+
+  <p>Das Projekt umfasst aktuell über 125 automatisierte Tests und ein vollständiges Benutzerhandbuch inklusive eines KI-Kapitels, das anderen Entwicklern und KI-Assistenten den Einstieg in die Codebasis erleichtert.</p>
+
+  <h2>Der KI-Aspekt</h2>
+
+  <p>Eine Besonderheit dieses Projekts: Ein großer Teil der Entwicklung wurde in enger Zusammenarbeit mit Claude (Anthropic) durchgeführt. Das Benutzerhandbuch enthält ein eigenes KI-Kapitel, das als Projektübergabe-Dokument dient — damit eine KI (oder ein neuer Entwickler) sofort produktiv am Code arbeiten kann, ohne sich erst durch tausende Zeilen Code lesen zu müssen.</p>
+
+  <p>Das KI-Kapitel dokumentiert unter anderem:</p>
+  <ul>
+    <li>Arbeitsregeln und Sicherheits-Checks (Backups, Syntax-Prüfung, Tests)</li>
+    <li>Die komplette Dateikarte mit Abhängigkeiten</li>
+    <li>Anleitungen für typische Erweiterungen (neue Kamera, neue Montierung)</li>
+    <li>Technische Details zum Alpaca-Treiber und Threading</li>
+    <li>Dokumentation aller bisherigen Fixes und Audit-Ergebnisse</li>
+  </ul>
+
+  <h2>Aktueller Stand</h2>
+
+  <p>Das System ist funktionsfähig und wird aktiv weiterentwickelt. Stand September 2026:</p>
+
+  <ul>
+    <li>Plate-Solving und Goto funktionieren auf echter Hardware</li>
+    <li>NINA-Anbindung über Alpaca ist verifiziert</li>
+    <li>Autoguiding läuft mit Multi-Stern-Tracking und Live-Diagnostik</li>
+    <li>Das System läuft als systemd-Service mit Watchdog</li>
+  </ul>
+
+  <p>Was noch kommt:</p>
+  <ul>
+    <li>Mehrpunkt-Pointing-Modell für bessere Goto-Genauigkeit über den ganzen Himmel</li>
+    <li>Langzeit-Autoguiding-Tests über komplette Aufnahme-Sessions</li>
+    <li>Kegelfehler-Korrektur</li>
+  </ul>
+
+  <h2>Quellcode</h2>
+
+  <p>Das gesamte Projekt ist Open Source auf GitHub verfügbar:</p>
+  <p><a href="https://github.com/chmasi/Starsense-DIY" target="_blank" rel="noopener">github.com/chmasi/Starsense-DIY</a></p>
+
+  <a href="../index.html#diy" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Zurück zur Übersicht
+  </a>
+
+</article>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-name">Martins Sternenhimmel</p>
+    <p>&copy; 2026 Martin Sickel</p>
+  </div>
+</footer>
+
+<script>
+  var btn = document.getElementById('menuToggle');
+  var links = document.getElementById('navLinks');
+  btn.addEventListener('click', function() { links.classList.toggle('open'); });
+  links.addEventListener('click', function(e) { if (e.target.tagName === 'A') links.classList.remove('open'); });
+</script>
+
+</body>
+</html>
