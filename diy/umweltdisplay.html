@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Umweltdisplay — Martins Sternenhimmel</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .shot { margin: 1.8rem 0; }
+    .shot img { width: 100%; height: auto; display: block; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); }
+    .shot figcaption { font-size: .85rem; opacity: .7; margin-top: .5rem; }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav scrolled" id="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">M. Sickel</a>
+    <button class="nav-toggle" aria-label="Menü" id="menuToggle">&#9776;</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#galerie">Galerie</a></li>
+      <li><a href="../index.html#blog">Blog</a></li>
+      <li><a href="../index.html#diy">DIY-Projekte</a></li>
+      <li><a href="../index.html#ueber-mich">Über mich</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="subpage-hero">
+  <p class="section-label">DIY-Projekt</p>
+  <h1>Umweltdisplay</h1>
+  <p class="hero-sub"><span class="diy-status wip">In Arbeit</span></p>
+</div>
+
+<article class="article">
+
+  <p>Eine Wetterstation, die ich mir so nirgends kaufen konnte: Sie misst das Raumklima, empfängt Funksensoren aus dem Garten, zeigt Vorhersage und Pollenflug an — und sagt mir nebenbei, ob sich heute Nacht das Aufbauen des Teleskops lohnt.</p>
+
+  <p>Das Umweltdisplay ist ein ESP32-S3 mit 7-Zoll-Touchdisplay. Alles, was es kann, steht auch als Weboberfläche im eigenen WLAN zur Verfügung — vom Handy, Tablet oder Rechner aus, ganz ohne Cloud-Konto und App.</p>
+
+  <h2>Was ist das Umweltdisplay?</h2>
+
+  <p>Das Gerät ist Wetterstation, Raumklima-Monitor und Astro-Planer in einem. Die Firmware läuft auf einem Elecrow CrowPanel Advance 7" (800×480 Pixel) und ist komplett in C++ mit PlatformIO geschrieben. Die Oberfläche auf dem Display basiert auf LVGL, die Weboberfläche wird direkt vom ESP32 ausgeliefert.</p>
+
+  <p>Die Kernfunktionen:</p>
+  <ul>
+    <li><strong>Raumklima</strong> — Temperatur, Luftfeuchte, Luftdruck, Luftqualität (IAQ) und CO₂ mit Min/Max-Werten und Verlaufsdiagrammen.</li>
+    <li><strong>Funk-Außensensoren</strong> — Bis zu acht LoRa-Sensorknoten (866 MHz) lassen sich per Web-Oberfläche koppeln, benennen und anzeigen. Auch ein Regensensor mit Minuten-, Stunden- und Tagessumme ist dabei.</li>
+    <li><strong>3-Tage-Vorhersage &amp; Pollenflug</strong> — Wetter, Sonnenzeiten, Wind und sechs Pollenarten von Open-Meteo, dazu eine Stundenvorhersage und die Mondphase.</li>
+    <li><strong>Astro-Wetter</strong> — Ein Seeing-Score von 0 bis 100, Dämmerungsfenster, Bewölkung der nächsten Stunden, Mondstand und eine Liste der heute Nacht sichtbaren Objekte. Auf dem Display gibt es dafür einen eigenen Nachtmodus in reinem Rot.</li>
+    <li><strong>NINA-Anbindung</strong> — Das Gerät meldet sich per ASCOM Alpaca als Safety Monitor und sagt N.I.N.A., ob die Bedingungen zum Beobachten taugen.</li>
+    <li><strong>Historie auf SD-Karte</strong> — Messwerte werden auf der SD-Karte gesichert, damit sie Neustarts überstehen und die Flash-Zugriffe das Display nicht stören.</li>
+    <li><strong>Selbstüberwachung</strong> — WLAN-Watchdog mit automatischem Neuverbinden, E-Mail-Alarm bei Sensorausfall und ein Systemlog im Browser.</li>
+  </ul>
+
+  <figure class="shot">
+    <img src="img/umweltdisplay-dashboard.jpg" alt="Web-Dashboard mit 3-Tage-Vorhersage, Pollenflug, Stundenvorhersage und Raumklima" loading="lazy">
+    <figcaption>Das Web-Dashboard: 3-Tage-Vorhersage mit Pollenflug, Stundenvorhersage und Raumklima (Screenshot mit Beispieldaten).</figcaption>
+  </figure>
+
+  <h2>Hardware</h2>
+
+  <ul>
+    <li><strong>Display &amp; Rechner:</strong> Elecrow CrowPanel Advance 7" mit ESP32-S3, 16 MB Flash, PSRAM und Touch (800×480, RGB)</li>
+    <li><strong>Raumsensoren:</strong> BME680 für Temperatur, Feuchte, Druck und Luftqualität (mit automatischem Fallback auf BME280), SCD41 für CO₂, CCS811 als Zusatz für Luftqualität</li>
+    <li><strong>Uhr:</strong> Batteriegepufferte Echtzeituhr BM8563 auf dem Panel, zusätzlich NTP-Zeitabgleich</li>
+    <li><strong>Funk:</strong> LoRa-Empfänger (RFM95/SX1276) an einem Arduino Pro Mini, der die Pakete per UART an den ESP32 weiterreicht</li>
+    <li><strong>Speicher:</strong> SD-Karte für Historie und Katalogdaten, LittleFS für Einstellungen</li>
+    <li><strong>Außensensoren:</strong> Selbstgebaute LoRa-Knoten für Temperatur, Feuchte, Druck und Regen</li>
+  </ul>
+
+  <h2>Warum der Pro Mini?</h2>
+
+  <p>Anfangs hing das LoRa-Modul direkt am ESP32. Das Ergebnis waren Mikroruckler im Bild: Der SPI-Bus und der Interrupt des Funkmoduls kamen sich mit dem RGB-Display und dem PSRAM in die Quere. Die Lösung ist eine kleine Bridge: Ein Arduino Pro Mini übernimmt den kompletten Funkempfang und schickt nur noch fertige Textzeilen mit Messwerten, Signalstärke und Signal-Rausch-Verhältnis per UART an den ESP32. Damit ist der Funkempfang vom Display-Bus entkoppelt.</p>
+
+  <h2>Astro-Wetter und Nachthimmel</h2>
+
+  <p>Dieser Teil ist aus meinem Hobby entstanden. Die Vorhersagedaten stecken ohnehin schon im Gerät, daher liegt es nahe, daraus auch eine Beobachtungsprognose zu berechnen.</p>
+
+  <ul>
+    <li><strong>Seeing-Score</strong> — Setzt sich aus Bewölkung, Mondlicht, Taupunkt, Wind, Lichtverschmutzung (Bortle-Klasse), Aerosolen, Thermik, Windscherung, Instabilität und Sichtweite zusammen. Jeder Faktor ist einzeln als Balken sichtbar.</li>
+    <li><strong>Dämmerungsfenster</strong> — Astronomische und nautische Dämmerung, daraus getrennte Zeitfenster für Breitband-Aufnahmen und für Schmalband mit H-Alpha-Filtern.</li>
+    <li><strong>Objektliste und Himmelskarte</strong> — Welche Objekte stehen heute Nacht hoch genug, wann und wie lange, und brauche ich einen Meridianflip? Die Karte zeigt sie mit Zenit in der Mitte, per Klick in der Tabelle wird ein Objekt hervorgehoben.</li>
+    <li><strong>Teleskop- und Kamera-Profile</strong> — Mit Brennweite, Öffnung und Sensorgröße wird geprüft, ob ein Objekt das Bildfeld sinnvoll ausfüllt.</li>
+    <li><strong>Objektsuche</strong> — Messier-, NGC- und IC-Nummern oder Eigennamen. Den Katalog erzeuge ich mit einem kleinen eigenen Browser-Werkzeug aus der OpenNGC-Datenbank.</li>
+    <li><strong>Uhrzeit-Vorschau</strong> — Die Objektliste lässt sich für eine beliebige Uhrzeit der Nacht berechnen.</li>
+  </ul>
+
+  <figure class="shot">
+    <img src="img/umweltdisplay-astro.jpg" alt="Astro-Seite mit Seeing-Score, Einflussfaktoren, Mond und Dämmerung" loading="lazy">
+    <figcaption>Die Astro-Seite im Nachtmodus: Seeing-Score, Einflussfaktoren, Mondphase und Filter-Fenster (Screenshot mit Beispieldaten).</figcaption>
+  </figure>
+
+  <figure class="shot">
+    <img src="img/umweltdisplay-himmelskarte.jpg" alt="Himmelskarte mit Zenit in der Mitte und den heute sichtbaren Objekten" loading="lazy">
+    <figcaption>Die Himmelskarte: Zenit in der Mitte, Horizont am Rand (Screenshot mit Beispieldaten).</figcaption>
+  </figure>
+
+  <h2>Außensensoren und Raumklima</h2>
+
+  <p>Gekoppelte Funksensoren erscheinen automatisch in der Weboberfläche. Pro Sensor lässt sich festlegen, welche Diagramme angezeigt werden, welcher Sensor auf dem Hauptdisplay erscheint und ob bei einem Ausfall eine E-Mail verschickt wird. Die Sensorwerte lassen sich über Stützpunkt-Tabellen kalibrieren. Wenn ein Sensor nach einem Neustart noch kein frisches Paket gesendet hat, zeigt das Gerät den zuletzt bekannten Wert in Orange.</p>
+
+  <figure class="shot">
+    <img src="img/umweltdisplay-sensoren.jpg" alt="Raumklima mit Temperatur, Feuchte, Druck, Luftqualität, CO2 und Außensensor-Verlauf" loading="lazy">
+    <figcaption>Raumklima, CO₂ und der Außensensor mit Tagesverlauf (Screenshot mit Beispieldaten).</figcaption>
+  </figure>
+
+  <h2>Software-Architektur</h2>
+
+  <p>Die Firmware besteht aus einer großen <code>main.cpp</code> und mehreren Header-Modulen:</p>
+
+  <ul>
+    <li><code>main.cpp</code> — Sensoren, LVGL-Oberfläche, Webserver, Pairing, Historie, Setup und Hauptschleife</li>
+    <li><code>webpages.h</code> — Dashboard, Sensor-Setup, Kalibrierung, Helligkeit und Astro-Seite als eingebettetes HTML/JS, inklusive Deutsch/Englisch-Umschalter</li>
+    <li><code>astro_calc.h</code> — Seeing-Score, Mond, Dämmerung, Objektberechnung und Katalog</li>
+    <li><code>astro_ui.h</code> — Astro-Screen im roten Nachtmodus auf dem Display</li>
+    <li><code>alpaca_safety.h</code> — ASCOM-Alpaca-Safety-Monitor mit UDP-Discovery für N.I.N.A.</li>
+    <li><code>pollenData.h</code> — Open-Meteo-Abruf für Wetter und Pollen</li>
+    <li><code>weather_bg.h</code>, <code>weather_icons.h</code> — animierte Wetterhintergründe und Symbole</li>
+    <li><code>emailAlarm.h</code> — E-Mail-Alarm bei Sensorausfall</li>
+    <li><code>syslog.h</code> — Systemlog mit Abruf im Browser</li>
+    <li><code>arduino.receiver/</code> — Sketch für die LoRa-Bridge auf dem Pro Mini</li>
+    <li><code>tools/ngc-catalog-builder/</code> — Browser-Werkzeug, das aus OpenNGC den Objektkatalog erzeugt</li>
+  </ul>
+
+  <p>Das Abrufen der Wetterdaten läuft in einem eigenen Task auf dem zweiten Kern, damit die Anzeige nie auf das Netzwerk warten muss. Die Firmware lässt sich per OTA-Update direkt über den Browser aktualisieren.</p>
+
+  <h2>Offen für Smart Home und KI</h2>
+
+  <p>Neben der Weboberfläche gibt es JSON-Schnittstellen für Messwerte, Vorhersage und Astro-Daten. Eine kompakte Zusammenfassung unter <code>/api/llm-context</code> ist für Home Assistant gedacht, zum Beispiel in Kombination mit einem lokalen Sprachmodell: „Wie wird das Wetter?“ oder „Ab wann ist heute gutes Astro-Wetter?“.</p>
+
+  <h2>Aktueller Stand</h2>
+
+  <p>Das Gerät läuft im Alltag und wird laufend weiterentwickelt. Stand Oktober 2026:</p>
+
+  <ul>
+    <li>Raumklima, Funksensoren, Vorhersage und Pollenflug laufen stabil</li>
+    <li>Astro-Wetter mit Objektliste, Himmelskarte und Teleskop-Profilen ist nutzbar</li>
+    <li>Die Anbindung an N.I.N.A. als Safety Monitor ist eingebaut</li>
+    <li>Historie auf SD-Karte, Watchdog und E-Mail-Alarm sind aktiv</li>
+  </ul>
+
+  <p>Was noch kommt, sind weitere Feinarbeiten an Oberfläche und Katalog sowie Langzeittests über mehrere Wochen.</p>
+
+  <h2>Quellcode</h2>
+
+  <p>Das gesamte Projekt ist Open Source auf GitHub verfügbar:</p>
+  <p><a href="https://github.com/chmasi/ESP32V3_UmweltDisplay" target="_blank" rel="noopener">github.com/chmasi/ESP32V3_UmweltDisplay</a></p>
+
+  <a href="../index.html#diy" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Zurück zur Übersicht
+  </a>
+
+</article>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-name">Martins Sternenhimmel</p>
+    <p>&copy; 2026 Martin Sickel</p>
+  </div>
+</footer>
+
+<script>
+  var btn = document.getElementById('menuToggle');
+  var links = document.getElementById('navLinks');
+  btn.addEventListener('click', function() { links.classList.toggle('open'); });
+  links.addEventListener('click', function(e) { if (e.target.tagName === 'A') links.classList.remove('open'); });
+</script>
+
+</body>
+</html>
