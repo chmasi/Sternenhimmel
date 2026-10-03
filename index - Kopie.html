@@ -45,19 +45,6 @@
   </div>
   <div class="gallery-grid">
 
-    <!--
-      BILD EINBAUEN:
-      1. Bild in "bilder/galerie/" legen
-      2. Die Platzhalter-Klasse durch ein style ersetzen:
-         <div class="gallery-visual" style="background-image: url('bilder/galerie/dein-bild.jpg')"></div>
-      3. Titel, Beschreibung und Aufnahmedaten anpassen
-
-      BESCHRIFTUNGEN (Annotations):
-      data-annotations='[{"x":50,"y":30,"label":"Objektname"}]'
-      x = horizontale Position in % (0=links, 100=rechts)
-      y = vertikale Position in % (0=oben, 100=unten)
-    -->
-
     <div class="gallery-item wide" tabindex="0" data-title="Sichelnebel (NGC 6888)" data-desc="Eine vom Wolf-Rayet-Stern WR 136 geformte Gasblase im Sternbild Schwan. Die filigrane Struktur zeigt Wasserstoff (rot) und ionisierten Sauerstoff (blaugrün) — zwei Wellenlängen, die den gewaltigen Sternwind sichtbar machen." data-meta="Celestron SCT 9.25&quot; + 0.63× Reducer · Sternbild Schwan · ca. 5.000 Lichtjahre" data-img="bilder/galerie/ngc6888-sichelnebel.jpg" data-annotations='[{"x":48,"y":45,"label":"WR 136"},{"x":35,"y":30,"label":"NGC 6888"}]'>
       <div class="gallery-visual" style="background-image: url('bilder/galerie/ngc6888-sichelnebel.jpg')"></div>
       <div class="gallery-caption"><h3>Sichelnebel (NGC 6888)</h3><p>Wolf-Rayet-Nebel im Schwan</p></div>
@@ -83,22 +70,19 @@
       <div class="gallery-caption"><h3>Nordamerikanebel (NGC 7000)</h3><p>Emissionsnebel im Schwan</p></div>
     </div>
 
-    <div class="gallery-item" tabindex="0" data-title="Adlernebel (M16)" data-desc="Der Adlernebel im Sternbild Schlange beherbergt die berühmten &bdquo;Säulen der Schöpfung&ldquo; — gewaltige Gassäulen, in denen neue Sterne entstehen. Der offene Sternhaufen IC 4703 beleuchtet den umgebenden Emissionsnebel Sh2-49." data-meta="Seestar S30 Pro · Sternbild Schlange · ca. 7.000 Lichtjahre" data-img="bilder/galerie/m16-adlernebel.jpg" data-overlay="bilder/galerie/m16-overlay.png">
+    <div class="gallery-item" tabindex="0" data-title="Adlernebel (M16)" data-desc="Der Adlernebel im Sternbild Schlange beherbergt die berühmten &bdquo;Säulen der Schöpfung&ldquo; — gewaltige Gassäulen, in denen neue Sterne entstehen. Der offene Sternhaufen IC 4703 beleuchtet den umgebenden Emissionsnebel Sh2-49." data-meta="Seestar S30 Pro · Sternbild Schlange · ca. 7.000 Lichtjahre" data-img="bilder/galerie/m16-adlernebel.jpg" data-overlay="bilder/galerie/m16-overlay.jpg">
       <div class="gallery-visual" style="background-image: url('bilder/galerie/m16-adlernebel.jpg')"></div>
       <div class="gallery-caption"><h3>Adlernebel (M16)</h3><p>Emissionsnebel in der Schlange</p></div>
+    </div>
+
+    <div class="gallery-item wide" tabindex="0" data-title="Adlernebel (M16) — Widefield" data-desc="Eine Weitfeldaufnahme der eindrucksvollen Nebelregion rund um den Adlernebel (M16) im Sternbild Schlange. Das Overlay zeigt die ionisierten Gasstrukturen sowie annotierte Deep-Sky-Objekte." data-meta="Seestar S30 Pro · Sternbild Schlange · ca. 7.000 Lichtjahre" data-img="bilder/galerie/M_16_Widefield.jpg" data-overlay="bilder/galerie/M_16_Widefield_annotated.jpg">
+      <div class="gallery-visual" style="background-image: url('bilder/galerie/M_16_Widefield.jpg')"></div>
+      <div class="gallery-caption"><h3>Adlernebel (M16) — Widefield</h3><p>Weitfeldaufnahme im Sternbild Schlange</p></div>
     </div>
 
     <div class="gallery-item wide" tabindex="0" data-title="Andromedagalaxie (M31)" data-desc="Die Andromedagalaxie ist mit rund 2,5 Millionen Lichtjahren Entfernung die nächste große Spiralgalaxie und das fernste Objekt, das mit bloßem Auge sichtbar ist. Mit ihren Begleitgalaxien NGC 205 (M110) und NGC 221 (M32) bildet sie das eindrucksvollste Galaxien-Trio am Nordhimmel." data-meta="Seestar S30 Pro · Sternbild Andromeda · ca. 2,5 Mio. Lichtjahre" data-img="bilder/galerie/m31-andromeda.jpg" data-overlay="bilder/galerie/m31-overlay.jpg">
       <div class="gallery-visual" style="background-image: url('bilder/galerie/m31-andromeda.jpg')"></div>
       <div class="gallery-caption"><h3>Andromedagalaxie (M31)</h3><p>Spiralgalaxie in der Andromeda</p></div>
-    </div>
-
-    <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
-      <div class="gallery-visual gallery-placeholder">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        <span>Bild 8</span>
-      </div>
-      <div class="gallery-caption"><h3>Aufnahme 8</h3><p>Aufnahmedaten</p></div>
     </div>
 
     <div class="gallery-item" tabindex="0" data-title="Titel der Aufnahme" data-desc="Beschreibung der Aufnahme." data-meta="Aufnahmedaten">
@@ -147,7 +131,7 @@
 <div class="section-divider"><hr></div>
 
 <!-- Blog -->
-<section class="section" id="blog">
+<!-- <section class="section" id="blog">
   <div class="section-header">
     <p class="section-label">Blog</p>
     <h2 class="section-title">Aus dem Beobachtungstagebuch</h2>
@@ -172,9 +156,9 @@
       <span class="blog-tag">Kategorie</span>
     </a>
   </div>
-</section>
+</section> -->
 
-<div class="section-divider"><hr></div>
+<!-- <div class="section-divider"><hr></div> -->
 
 <!-- DIY Projects -->
 <section class="section" id="diy">
@@ -193,18 +177,18 @@
         <p>Raspberry-Pi-basiertes Teleskop-Steuerungssystem mit Plate-Solving, Autoguiding und NINA-Anbindung — Open-Source-Ersatz für das defekte Celestron-Alignment.</p>
       </div>
     </a>
-    <a class="diy-card" href="diy/projekt-2.html">
+    <a class="diy-card" href="diy/umweltdisplay.html">
       <div class="diy-thumb">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
         <span>Foto einfügen</span>
       </div>
       <div class="diy-body">
         <span class="diy-status done">Fertig</span>
-        <h3>Projekttitel</h3>
-        <p>Kurze Beschreibung des Projekts.</p>
+        <h3>Umweltdisplay mit Astrowetter</h3>
+        <p>Wetterstation incl. Webpage mit Aussensensoren und Astrowetter incl ASCOM Alpaca Saftey Server</p>
       </div>
     </a>
-    <a class="diy-card" href="diy/projekt-3.html">
+<!--     <a class="diy-card" href="diy/projekt-3.html">
       <div class="diy-thumb">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
         <span>Foto einfügen</span>
@@ -225,7 +209,7 @@
         <h3>Projekttitel</h3>
         <p>Kurze Beschreibung des Projekts.</p>
       </div>
-    </a>
+    </a> -->
   </div>
 </section>
 
