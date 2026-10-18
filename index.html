@@ -235,6 +235,18 @@
 </footer>
 
 <script>
+  // Shuffle gallery
+  (function() {
+    var grid = document.querySelector('.gallery-grid');
+    if (!grid) return;
+    var items = Array.prototype.slice.call(grid.children);
+    for (var i = items.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      grid.appendChild(items[j]);
+      items[j] = items[i];
+    }
+  })();
+
   // Starfield
   (function() {
     var canvas = document.getElementById('starfield');
