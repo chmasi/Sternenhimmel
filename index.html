@@ -235,6 +235,14 @@
 </footer>
 
 <script>
+  // Image protection
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.closest('.gallery-item, .lightbox-visual')) e.preventDefault();
+  });
+  document.addEventListener('dragstart', function(e) {
+    if (e.target.tagName === 'IMG' && e.target.closest('.gallery-item, .lightbox-visual, .lb-img-wrap')) e.preventDefault();
+  });
+
   // Shuffle gallery
   (function() {
     var grid = document.querySelector('.gallery-grid');
