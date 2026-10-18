@@ -247,16 +247,35 @@
     if (e.target.tagName === 'IMG' && e.target.closest('.gallery-item, .lightbox-visual, .lb-img-wrap')) e.preventDefault();
   });
 
-  // Shuffle gallery
+  // Shuffle gallery and ensure no item stands alone in a row
   (function() {
     var grid = document.querySelector('.gallery-grid');
     if (!grid) return;
-    var items = Array.prototype.slice.call(grid.children);
-    for (var i = items.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      grid.appendChild(items[j]);
-      items[j] = items[i];
+    var all = Array.prototype.slice.call(grid.children);
+    var wide = [], normal = [];
+    for (var i = 0; i < all.length; i++) {
+      (all[i].classList.contains('wide') ? wide : normal).push(all[i]);
     }
+    function shuffle(a) {
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+    }
+    shuffle(wide); shuffle(normal);
+    var result = [], ni = 0, wi = 0;
+    while (ni < normal.length || wi < wide.length) {
+      if (ni + 1 < normal.length) {
+        result.push(normal[ni++], normal[ni++]);
+        if (wi < wide.length && Math.random() > 0.4) result.push(wide[wi++]);
+      } else if (wi < wide.length) {
+        result.push(wide[wi++]);
+      } else if (ni < normal.length) {
+        normal[ni].classList.add('wide');
+        result.push(normal[ni++]);
+      }
+    }
+    for (var i = 0; i < result.length; i++) grid.appendChild(result[i]);
   })();
 
   // Starfield
